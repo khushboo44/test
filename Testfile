@@ -1,0 +1,44 @@
+Challenge 1
+---------------------
+
+Three tier architecture in Azure
+
+step 1 : Create a Resource grp 
+step 2 : Using ARM templates create machines (Linux/ windows)
+step 3 : Create 2 load balancer (Front end with public IP to handle website load and other is backend LB to handle internal load)
+step 4: set up IIS on windows machine 
+step 5 : Create SQL for DB part and an alternative DB for recovery faults as secondary DB
+
+this whole approach in single go can be done even with terraforms as well 
+
+
+*************************************************************************************************************************************
+
+
+1) Get metadata in Azure is easy using Azure data factory Get Metadata Activity where we need to set up the source details and output details 
+2) Apart from this we can get using this command also :
+curl -H Metadata:True --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01&format=json" | jq .
+
+***************************************************************************************************************************************************
+Python code
+---------------
+//using python dictionaries to find value of nested keys 
+
+def nest(param: dict):
+    keys = list(param)
+    if len(keys) != 1:
+     raise error("Error")
+    else:
+     return keys[0]
+
+def function(param: dict, key: str, flag = False):
+    if type(param) is not dict and not flag:
+        return None
+    if (flag or (key in param.keys())) :
+        if type(param[key]) is dict:
+            return function(param[key], nest(param[key]), True)
+        else:
+            return param[nest(param)]
+    else:
+        nestedKey = nestKey(param)
+        return function(param[nestedKey], key, False)
